@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/f29349c240.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="music-player">
+            <nav>
+                <div class="circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+                <div class="right-icons">
+                    <div class="circle"></div>
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+            <img src="media/Afreen.webp" class="song-img" id="songImg">
+            <h1 id="songTitle">Afreen-Afreen</h1>
+            <p id="songArtist">Nusrat Fateh Ali Khan</p>
+            <audio id="song">
+                <source id="songSource" src="media/Afreen-Afreen.mp3" type="audio/mpeg">
+            </audio>
+            <input type="range" value="0" id="progress">
+            <div class="controls">
+                <div onclick="prevSong()"><i class="fa-solid fa-backward"></i></div>
+                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                <div onclick="nextSong()"><i class="fa-solid fa-forward"></i></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const songs = [
+        {
+            title: "Afreen-Afreen",
+            artist: "Nusrat Fateh Ali Khan",
+            file: "media/Afreen-Afreen.mp3",
+            image: "media/Afreen.webp"
+        },
+        {
+            title: "Aankh Hai Bhari Bhari (Reprise)",
+            artist: "Reprise",
+            file: "media/Aankh H bhari Bhari(Reprise).mp3",
+            image: "media/Reprise.webp"
+        },
+        {
+            title: "Asal Mein",
+            artist: "Darshan Raval",
+            file: "media/Asal mein.mp3",
+            image: "media/Asal Mein.webp"
+        },
+        {
+            title: "Bekhayali",
+            artist: "Sachet Tondon",
+            file: "media/Bekhayali.mp3",
+            image: "media/Bekhayali.webp"
+        },
+        {
+            title: "Bhagwan Hai Kaha Re Tu",
+            artist: "Sonu Nigam",
+            file: "media/Bhagwan H kaha re Tu.mp3",
+            image: "media/Bhagwan H kaha re Tu.webp"
+        },
+        {
+            title: "Pyaar Tumse",
+            artist: "Salman Ali",
+            file: "media/Pyaar Tumse.mp3",
+            image: "media/Pyaar Tumse.webp"
+        },
+        {
+            title: "Tune Mere Jaana",
+            artist: "Gajendra Verma",
+            file: "media/Tune Mere jaana.mp3",
+            image: "media/Tune Mere jaana.webp"
+        }
+    ];
+
+    let songIndex = 0;
+    const songTitle = document.getElementById("songTitle");
+    const songArtist = document.getElementById("songArtist");
+    const songImg = document.getElementById("songImg");
+    const songSource = document.getElementById("songSource");
+    const song = document.getElementById("song");
+    const ctrlIcon = document.getElementById("ctrlIcon");
+    const progress = document.getElementById("progress");
+
+    function loadSong(index) {
+        songTitle.innerText = songs[index].title;
+        songArtist.innerText = songs[index].artist;
+        songImg.src = songs[index].image;
+        songSource.src = songs[index].file;
+        song.load();
+    }
+
+    function playPause() {
+        if (ctrlIcon.classList.contains("fa-pause")) {
+            song.pause();
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+        } else {
+            song.play();
+            ctrlIcon.classList.remove("fa-play");
+            ctrlIcon.classList.add("fa-pause");
+        }
+    }
+
+    function nextSong() {
+        songIndex = (songIndex + 1) % songs.length;
+        loadSong(songIndex);
+        song.play();
+        ctrlIcon.classList.remove("fa-play");
+        ctrlIcon.classList.add("fa-pause");
+    }
+
+    function prevSong() {
+        songIndex = (songIndex - 1 + songs.length) % songs.length;
+        loadSong(songIndex);
+        song.play();
+        ctrlIcon.classList.remove("fa-play");
+        ctrlIcon.classList.add("fa-pause");
+    }
+
+    // Initialize the first song
+    loadSong(songIndex);
+
+    // Update the progress bar
+    song.addEventListener("timeupdate", function() {
+        progress.max = song.duration;
+        progress.value = song.currentTime;
+    });
+
+    progress.addEventListener("input", function() {
+        song.currentTime = progress.value;
+    });
+
+</script>
+</body>
+</html>
